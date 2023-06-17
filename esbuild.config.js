@@ -6,7 +6,8 @@ const isProduction = !process.argv.includes('--watch');
 
 const config = {
   entryPoints: {
-    main: 'index.ts',
+    client: 'client.ts',
+    server: 'server.ts',
   },
   outdir: './dist/',
   bundle: true,

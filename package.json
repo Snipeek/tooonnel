@@ -3,10 +3,14 @@
   "packageManager": "yarn@3.2.4",
   "scripts": {
     "dev": "node esbuild.config.js --watch",
+    "build": "node esbuild.config.js",
     "start": "node ./dist/main.js"
   },
   "dependencies": {
     "esbuild": "^0.18.4",
-    "http-proxy": "^1.18.1"
+    "http-proxy": "^1.18.1",
+    "minimist": "^1.2.8",
+    "socket.io": "^4.6.2",
+    "socket.io-client": "^4.6.2"
   }
 }
