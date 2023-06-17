@@ -37,9 +37,14 @@ const server = http.createServer(function(req, res) {
   proxy.web(req, res, settings);
 });
 
-server.on('error', function (e) {
-  // Handle your error here
-  console.log(e);
+proxy.on('error', function (err, req, res) {
+  res.writeHead(500, {
+    'Content-Type': 'text/plain'
+  });
+
+  console.log(err);
+
+  res.end('Something went wrong. And we are reporting a custom error message.');
 });
 
 server.on('upgrade', function (req, socket, head) {
