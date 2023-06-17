@@ -1,15 +1,31 @@
 import http from 'http';
 import httpProxy from 'http-proxy';
 
-const settings = {
-  ws: true,
-  target: {
-    host: 'localhost',
-    port: 6539
-  }
-};
+const settings = { ws: true };
 
-let proxy = httpProxy.createProxyServer(settings);
+const createProxy = (ip, port) => {
+  const proxy = httpProxy.createProxyServer({
+    ...settings,
+    target: {
+      host: ip,
+      port,
+    }
+  });
+
+  proxy.on('error', function (err, req, res) {
+    res.writeHead(500, {
+      'Content-Type': 'text/plain'
+    });
+
+    console.log(err);
+
+    res.end('Something went wrong. And we are reporting a custom error message.');
+  });
+
+  return proxy;
+}
+
+let proxy = createProxy('localhost', 6539);
 
 const server = http.createServer(function(req, res) {
   const { pathname, searchParams } = new URL('http://localhost:5050' + req.url);
@@ -21,30 +37,13 @@ const server = http.createServer(function(req, res) {
 
     const port = searchParams.get('port') || 6539;
 
-    proxy = httpProxy.createProxyServer({
-      ...settings,
-      target: {
-        host: ip,
-        port,
-      }
-    });
+    proxy = createProxy('ip', port);
 
     res.writeHead(200, { 'Content-Type': 'text/text' });
-    res.write(ip + ':' + port);
-    res.end();
+    res.end(ip + ':' + port);
     return;
   }
   proxy.web(req, res, settings);
-});
-
-proxy.on('error', function (err, req, res) {
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
-  });
-
-  console.log(err);
-
-  res.end('Something went wrong. And we are reporting a custom error message.');
 });
 
 server.on('upgrade', function (req, socket, head) {

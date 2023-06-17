@@ -1351,39 +1351,36 @@ var require_http_proxy3 = __commonJS({
 // index.ts
 var import_http = __toESM(require("http"));
 var import_http_proxy = __toESM(require_http_proxy3());
-var settings = {
-  ws: true,
-  target: {
-    host: "localhost",
-    port: 6539
-  }
+var settings = { ws: true };
+var createProxy = (ip, port) => {
+  const proxy2 = import_http_proxy.default.createProxyServer({
+    ...settings,
+    target: {
+      host: ip,
+      port
+    }
+  });
+  proxy2.on("error", function(err, req, res) {
+    res.writeHead(500, {
+      "Content-Type": "text/plain"
+    });
+    console.log(err);
+    res.end("Something went wrong. And we are reporting a custom error message.");
+  });
+  return proxy2;
 };
-var proxy = import_http_proxy.default.createProxyServer(settings);
+var proxy = createProxy("localhost", 6539);
 var server = import_http.default.createServer(function(req, res) {
   const { pathname, searchParams } = new URL("http://localhost:5050" + req.url);
   if (pathname === "/tooonnel") {
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || null;
     const port = searchParams.get("port") || 6539;
-    proxy = import_http_proxy.default.createProxyServer({
-      ...settings,
-      target: {
-        host: ip,
-        port
-      }
-    });
+    proxy = createProxy("ip", port);
     res.writeHead(200, { "Content-Type": "text/text" });
-    res.write(ip + ":" + port);
-    res.end();
+    res.end(ip + ":" + port);
     return;
   }
   proxy.web(req, res, settings);
-});
-proxy.on("error", function(err, req, res) {
-  res.writeHead(500, {
-    "Content-Type": "text/plain"
-  });
-  console.log(err);
-  res.end("Something went wrong. And we are reporting a custom error message.");
 });
 server.on("upgrade", function(req, socket, head) {
   proxy.ws(req, socket, head);
