@@ -7654,7 +7654,7 @@ var transactions = {};
 var port = 6539;
 var server = "tooonnel.jusp.me";
 if (port && server) {
-  const socket = lookup(`ws://${server}`);
+  const socket = lookup(`wss://${server}`);
   socket.on("connect", () => {
     console.log(`Connected. Forwarding traffic to: localhost:${port}`);
   });

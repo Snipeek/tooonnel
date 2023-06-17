@@ -6,7 +6,7 @@ const transactions = {};
 const port = 6539, server = 'tooonnel.jusp.me'
 
 if (port && server) {
-  const socket = socketio(`ws://${server}`);
+  const socket = socketio(`wss://${server}`);
 
   socket.on('connect', () => {
     console.log(`Connected. Forwarding traffic to: localhost:${port}`);
