@@ -34,14 +34,12 @@ const server = http.createServer(function(req, res) {
     res.end();
     return;
   }
-  try {
-    proxy.web(req, res, settings);
-  } catch (e) {
-    console.log(e);
-    res.writeHead(404, { 'Content-Type': 'text/text' });
-    res.write('ooops');
-    res.end();
-  }
+  proxy.web(req, res, settings);
+});
+
+server.on('error', function (e) {
+  // Handle your error here
+  console.log(e);
 });
 
 server.on('upgrade', function (req, socket, head) {
