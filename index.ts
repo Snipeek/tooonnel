@@ -34,7 +34,14 @@ const server = http.createServer(function(req, res) {
     res.end();
     return;
   }
-  proxy.web(req, res, settings);
+  try {
+    proxy.web(req, res, settings);
+  } catch (e) {
+    console.log(e);
+    res.writeHead(404, { 'Content-Type': 'text/text' });
+    res.write('ooops');
+    res.end();
+  }
 });
 
 server.on('upgrade', function (req, socket, head) {
