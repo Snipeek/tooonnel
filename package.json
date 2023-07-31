@@ -2,12 +2,10 @@
   "name": "tooonnel",
   "packageManager": "yarn@3.2.4",
   "scripts": {
-    "dev": "node esbuild.config.js --watch",
-    "build": "node esbuild.config.js",
-    "server": "node ./dist/server.js"
+    "server": "node ./dist/server.js",
+    "client": "node ./dist/client.js"
   },
   "dependencies": {
-    "esbuild": "^0.18.4",
     "http-proxy": "^1.18.1",
     "minimist": "^1.2.8",
     "socket.io": "^4.6.2",
