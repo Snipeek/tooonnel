@@ -1,14 +1,17 @@
 {
   "name": "tooonnel",
+  "type": "module",
   "packageManager": "yarn@3.2.4",
   "scripts": {
-    "server": "node ./dist/server.js",
-    "client": "node ./dist/client.js"
+    "build": "",
+    "server": "node ./server.js",
+    "client": "node ./client.js"
   },
   "dependencies": {
     "http-proxy": "^1.18.1",
     "minimist": "^1.2.8",
     "socket.io": "^4.6.2",
-    "socket.io-client": "^4.6.2"
+    "socket.io-client": "^4.6.2",
+    "ws": "^8.18.0"
   }
 }
